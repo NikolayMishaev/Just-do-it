@@ -1,37 +1,69 @@
 'use strict'
 
-const containerBtnsThemes = document.querySelector('.task-manager__theme')
 const body = document.querySelector('.body')
+const containerBtnsThemes = document.querySelector('.task-manager__theme')
+const inputTask = document.querySelector('.task-manager__input')
+const buttonTaskAdd = document.querySelector('.task-manager__button_task_add')
 
-const addClass = (element, ...className) => element.classList.add(...className)
-const removeClass = (element, className) => {
-    if (!className) element.className = ""
-    else element.classList.remove(className)
+const arrayTasks = []
+
+const addClasses = (element, ...className) => element.classList.add(...className)
+
+const removeClasses = (element, ...className) => {
+    if (className.length === 0) element.className = ""
+    else element.classList.remove(...className)
 }
 
-const getTheme = (event) => event.target.className.split('_').at(-1)
+const getTheme = (event) => {
+    const theme = event.target.className.split('_').at(-1)
+    if (theme === body.className.split('_').at(-1)) return  // если текущая тема та же, что и была, тогда тему не менять
+    const possibleThemes = ['grey', 'white', 'black']
+    if (possibleThemes.includes(theme)) return theme
+}
+
 const setTheme = (theme) => {
     switch (theme) {
         case'grey': {
-            removeClass(body)
-            addClass(body, 'body', 'body_theme_grey')
+            removeClasses(body)
+            addClasses(body, 'body', 'body_theme_grey')
             break
         }
         case'white': {
-            removeClass(body)
-            addClass(body, 'body', 'body_theme_white')
+            removeClasses(body)
+            addClasses(body, 'body', 'body_theme_white')
             break
         }
         case'black': {
-            removeClass(body)
-            addClass(body, 'body', 'body_theme_black')
+            removeClasses(body)
+            addClasses(body, 'body', 'body_theme_black')
             break
         }
         default: {
-            removeClass(body)
+            removeClasses(body)
             body.classList.add('body', 'body_theme_grey')
         }
     }
 }
 
-containerBtnsThemes.addEventListener('click', event => setTheme(getTheme(event)))
+const getDate = () => {
+    const date = new Date()
+    const year = date.getFullYear()
+    const month = date.getMonth() + 1
+    const day = date.getDate()
+    const hours = date.getHours()
+    const minutes = date.getMinutes()
+    const seconds = date.getSeconds()
+    return `${day}/${month}/${year}, ${hours}:${minutes}:${seconds} ${hours > 12 ? 'PM' : 'AM'}`
+}
+
+containerBtnsThemes.addEventListener('click', event => {
+    const theme = getTheme(event)
+    if (theme) setTheme(theme)
+})
+
+buttonTaskAdd.addEventListener('click', (event => {
+    const taskText = inputTask.value
+    if (!taskText) return
+    arrayTasks.push({text: taskText, time: getDate()})
+    console.log(arrayTasks)
+}))
