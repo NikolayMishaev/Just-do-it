@@ -31,7 +31,7 @@
 }
 
 .task-manager__button_theme_grey {
-    background-image: linear-gradient(to right, rgb(77, 81, 84), rgb(11, 48, 64));
+    background-image: linear-gradient(to right, rgb(156, 156, 156), rgb(34, 64, 78));
 }
 
 .task-manager__button_theme_white {
@@ -80,6 +80,13 @@
     min-width: 35px;
     min-height: 35px;
     border: none;
+    transition-duration: .5s;
+}
+
+.task-manager__button:hover {
+    transform: scale(1.1);
+    transition-duration: .5s;
+    cursor: pointer;
 }
 
 .task-manager__button_task_add {
@@ -132,4 +139,50 @@
 .task-manager__button_task_delete {
     margin-right: 15px;
     background: no-repeat center/cover url(images/pic_delete.jpg);
+}
+
+.body_theme_white {
+    background-image: none;
+    background-color: white;
+}
+
+.body_theme_white .task-manager__title {
+    color: black
+}
+
+.body_theme_white .task-manager__input {
+    background-color: white;
+    border: 2px solid black;
+    color: black
+}
+
+.body_theme_white .task-manager__button_task_add {
+    border: 2px solid black;
+    border-left: none;
+    background-color: white;
+}
+
+.body_theme_white .task-manager__date {
+    color: black;
+}
+
+.body_theme_white .task-manager__task{
+    background-color: white;
+    border: 2px solid black;
+    color: black;
+}
+
+.body_theme_white .task-manager__task_complete {
+    color: rgb(158, 158, 158);
+}
+
+.body_theme_white .task-manager__button_task_complete{
+    margin-left: auto;
+    margin-right: 11px;
+    background: no-repeat center/cover url(images/pic_success_white.png);
+}
+
+.body_theme_white .task-manager__button_task_delete {
+    margin-right: 15px;
+    background: no-repeat center/cover url(images/pic_delete_white.png);
 }
