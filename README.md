@@ -11,3 +11,5 @@
 - удаление задачи
 - три темы приложения для выбора
 - если кол-во задач больше 5шт, тогда пагинация
+### Макет в img
+![макет](https://github.com/NikolayMishaev/Just-do-it/raw/master/layout.jpg)
