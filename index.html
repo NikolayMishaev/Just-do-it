@@ -9,17 +9,21 @@
 </head>
 <body class="body">
     <div class="task-manager">
-        <div class="task-manager__theme"></div>
-        <h1 class = 'task-manager__header'>Just do it.</h1>
-        <div>
-            <input type="task-manager__input">
-            <button class="task-manager__button task-manager__button_task-add">I Got This!</button>
+        <div class="task-manager__theme">
+            <button class="task-manager__button task-manager__button_theme_grey"></button>
+            <button class="task-manager__button task-manager__button_theme_white"></button>
+            <button class="task-manager__button task-manager__button_theme_black"></button>
+        </div>
+        <h1 class = 'task-manager__title'>Just do it.</h1>
+        <div class="task-manager__input-panel">
+            <input class="task-manager__input" placeholder="  Add a task.">
+            <button class="task-manager__button task-manager__button_task_add">I Got This!</button>
         </div>
         <p class="task-manager__date">01.04.2025</p>
         <ul class="task-manager__container-tasks">
             <li class="task-manager__task">task 1
-                <button class="task-manager__button task-manager__button_task-complete"></button>
-                <button class="task-manager__button task-manager__button_task-delete"></button>
+                <button class="task-manager__button task-manager__button_task_complete"></button>
+                <button class="task-manager__button task-manager__button_task_delete"></button>
             </li>
             <li class="task-manager__task">task 2</li>
         </ul>
