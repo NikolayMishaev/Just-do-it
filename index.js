@@ -9,8 +9,9 @@ const removeClass = (element, className) => {
     else element.classList.remove(className)
 }
 
-containerBtnsThemes.addEventListener('click', (e) => {
-    switch (e.target.className.split('_').at(-1)){
+const getTheme = (event) => event.target.className.split('_').at(-1)
+const setTheme = (theme) => {
+    switch (theme) {
         case'grey': {
             removeClass(body)
             addClass(body, 'body', 'body_theme_grey')
@@ -31,5 +32,6 @@ containerBtnsThemes.addEventListener('click', (e) => {
             body.classList.add('body', 'body_theme_grey')
         }
     }
-})
+}
 
+containerBtnsThemes.addEventListener('click', event => setTheme(getTheme(event)))
