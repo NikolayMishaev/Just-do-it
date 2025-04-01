@@ -1,3 +1,5 @@
+@import url(fonts/Moderustic.css);
+
 .body {
     display: flex;
     justify-content: center;
@@ -6,18 +8,14 @@
 }
 
 .task-manager {
-    padding-top: 10vh;
+    padding-top: 12vh;
 }
 
-.h1 {
+.task-manager__header {
     margin: 0;
-    color: black;
-}
-
-.body_theme_black {
-    background-color: grey;
-}
-
-.body_theme_black .h1 {
-    color: red
+    color: white;
+    font-family: 'Moderustic', 'Arial', sans-serif;
+    font-weight: 500;
+    font-size: 85px;
+    letter-spacing: 7px;
 }
