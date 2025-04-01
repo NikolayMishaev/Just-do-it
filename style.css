@@ -1,0 +1,23 @@
+.body {
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    background-image: linear-gradient(to right, rgb(77, 81, 84), rgb(11, 48, 64));
+}
+
+.task-manager {
+    padding-top: 10vh;
+}
+
+.h1 {
+    margin: 0;
+    color: black;
+}
+
+.body_theme_black {
+    background-color: grey;
+}
+
+.body_theme_black .h1 {
+    color: red
+}

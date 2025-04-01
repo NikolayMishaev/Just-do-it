@@ -7,7 +7,22 @@
     <link rel="stylesheet" href="style.css">
     <script defer src="index.js"></script>
 </head>
-<body>
-
+<body class="body">
+    <div class="task-manager">
+        <div class="task-manager__theme"></div>
+        <h1 class = 'task-manager__header'>Just do it.</h1>
+        <div>
+            <input type="task-manager__input">
+            <button class="task-manager__button task-manager__button_task-add">I Got This!</button>
+        </div>
+        <p class="task-manager__date">01.04.2025</p>
+        <ul class="task-manager__container-tasks">
+            <li class="task-manager__task">task 1
+                <button class="task-manager__button task-manager__button_task-complete"></button>
+                <button class="task-manager__button task-manager__button_task-delete"></button>
+            </li>
+            <li class="task-manager__task">task 2</li>
+        </ul>
+    </div>
 </body>
 </html>
