@@ -8,9 +8,11 @@ const containerTasks = document.querySelector('.task-manager__container-tasks')
 const templateTask = document.querySelector('.template-task')
 const dateLastTask = document.querySelector('.task-manager__date')
 const paginationPanel = document.querySelector('.task-manager__pagination-panel')
+const buttonPrevPagination = document.querySelector('.task-manager__button_pagination_prev')
+const buttonNextPagination = document.querySelector('.task-manager__button_pagination_next')
 
 let arrayTasks = []
-let page = 1
+let currentPage = 0
 
 const addClasses = (element, ...className) => element.classList.add(...className)
 
@@ -60,7 +62,7 @@ const deleteTask = (event) => {
     arrayTasks = arrayTasks.filter(task => task.date !== dateCurrentTask)
     currentTask.remove()
     updateDate()
-    checkCountTasks()
+    viewTasks()
 }
 
 const updateDate = () => {
@@ -87,16 +89,32 @@ const createTask = (text, dateCreateTask) => {
     const btnTaskDelete = task.querySelector('.task-manager__button_task_delete')
     setEventListener(btnTaskComplete, checkTaskComplete)
     setEventListener(btnTaskDelete, deleteTask)
-    containerTasks.prepend(task)
+    containerTasks.append(task)
 }
 
-const checkCountTasks = () => {
-    if (arrayTasks.length < 2) {
-        paginationPanel.classList.add('display-none')
-    } else {
-        paginationPanel.classList.remove('display-none')
+const viewTasks = () => {
+    if (arrayTasks.length < 3) {
+        hidePaginationPanel()
+        sliceTasks()
+        updateDate()
+        return
     }
+    showPaginationPanel()
+    sliceTasks()
+    updateDate()
 }
+
+const clearContainerTasks = () => containerTasks.textContent = ''
+
+const sliceTasks = () => {
+    clearContainerTasks()
+    const currentSlice = currentPage * 10
+    arrayTasks.toReversed().slice(currentSlice, currentSlice + 10).map(task => createTask(task.text, task.date))
+}
+
+const showPaginationPanel = () => paginationPanel.classList.remove('display-none')
+
+const hidePaginationPanel = () => paginationPanel.classList.add('display-none')
 
 containerBtnsThemes.addEventListener('click', event => {
     const theme = getTheme(event)
@@ -108,9 +126,19 @@ buttonTaskAdd.addEventListener('click', (event => {
     if (!taskText) return
     const currentDate = getDate()
     // запрет на добавление задачи с одинаковой датой и временем, т.е. добавление новой таски д.б. не чаще раза в секунду
-    if (arrayTasks.find(task => task.date === currentDate)) return
+    // if (arrayTasks.find(task => task.date === currentDate)) return
     arrayTasks.push({text: taskText, date: currentDate})
-    createTask(taskText, currentDate)
-    updateDate()
-    checkCountTasks()
+    viewTasks()
 }))
+
+buttonPrevPagination.addEventListener('click', ()=> {
+    if (currentPage === 0) return
+    --currentPage
+    sliceTasks()
+})
+
+buttonNextPagination.addEventListener('click', ()=> {
+    if (currentPage + 1 === Math.ceil(arrayTasks.length / 10)) return
+    ++currentPage
+    sliceTasks()
+})
