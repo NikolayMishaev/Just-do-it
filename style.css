@@ -162,7 +162,15 @@
     justify-content: center;
 }
 
-.task-manager__button_pagination_prev {
+.task-manager__page {
+    width: 60px;
+    background-color: white;
+    border-radius: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    margin-left: 10px;
     margin-right: 10px;
 }
 

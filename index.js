@@ -10,9 +10,11 @@ const dateLastTask = document.querySelector('.task-manager__date')
 const paginationPanel = document.querySelector('.task-manager__pagination-panel')
 const buttonPrevPagination = document.querySelector('.task-manager__button_pagination_prev')
 const buttonNextPagination = document.querySelector('.task-manager__button_pagination_next')
+const page = document.querySelector('.task-manager__page')
 
 let arrayTasks = []
 let currentPage = 0
+let countTasksOnPage = 3
 
 const addClasses = (element, ...className) => element.classList.add(...className)
 
@@ -52,6 +54,8 @@ const setTheme = (theme) => {
     }
 }
 
+const getMaxCountPage = () => Math.ceil(arrayTasks.length / countTasksOnPage)
+
 const setEventListener = (element, action) => element.addEventListener('click', action)
 
 const checkTaskComplete = (event) => event.target.closest('.task-manager__task').classList.toggle('task-manager__task_complete')
@@ -60,7 +64,6 @@ const deleteTask = (event) => {
     const currentTask = event.target.closest('.task-manager__task')
     const dateCurrentTask = currentTask.getAttribute('data-time-create')
     arrayTasks = arrayTasks.filter(task => task.date !== dateCurrentTask)
-    currentTask.remove()
     updateDate()
     viewTasks()
 }
@@ -92,13 +95,24 @@ const createTask = (text, dateCreateTask) => {
     containerTasks.append(task)
 }
 
+const setCountPage = () => {
+    if (arrayTasks.length < countTasksOnPage) {
+        currentPage = 0
+        return
+    }
+    const maxCountPage = getMaxCountPage()
+    if (currentPage + 1 > maxCountPage) currentPage = maxCountPage - 1
+}
+
 const viewTasks = () => {
-    if (arrayTasks.length < 3) {
+    if (arrayTasks.length < countTasksOnPage) {
+        setCountPage()
         hidePaginationPanel()
         sliceTasks()
         updateDate()
         return
     }
+    setCountPage()
     showPaginationPanel()
     sliceTasks()
     updateDate()
@@ -106,10 +120,20 @@ const viewTasks = () => {
 
 const clearContainerTasks = () => containerTasks.textContent = ''
 
+const viewPage = () => {
+    const maxCountPage = getMaxCountPage()
+    if (maxCountPage === 1) {
+        page.textContent = currentPage + 1
+    } else {
+        page.textContent = `${currentPage + 1} / ${maxCountPage}`
+    }
+}
+
 const sliceTasks = () => {
     clearContainerTasks()
-    const currentSlice = currentPage * 10
-    arrayTasks.toReversed().slice(currentSlice, currentSlice + 10).map(task => createTask(task.text, task.date))
+    viewPage()
+    const currentSlice = currentPage * countTasksOnPage
+    arrayTasks.toReversed().slice(currentSlice, currentSlice + countTasksOnPage).map(task => createTask(task.text, task.date))
 }
 
 const showPaginationPanel = () => paginationPanel.classList.remove('display-none')
@@ -126,7 +150,7 @@ buttonTaskAdd.addEventListener('click', (event => {
     if (!taskText) return
     const currentDate = getDate()
     // запрет на добавление задачи с одинаковой датой и временем, т.е. добавление новой таски д.б. не чаще раза в секунду
-    // if (arrayTasks.find(task => task.date === currentDate)) return
+    if (arrayTasks.find(task => task.date === currentDate)) return
     arrayTasks.push({text: taskText, date: currentDate})
     viewTasks()
 }))
@@ -138,7 +162,7 @@ buttonPrevPagination.addEventListener('click', ()=> {
 })
 
 buttonNextPagination.addEventListener('click', ()=> {
-    if (currentPage + 1 === Math.ceil(arrayTasks.length / 10)) return
+    if (currentPage + 1 === getMaxCountPage()) return
     ++currentPage
     sliceTasks()
 })
