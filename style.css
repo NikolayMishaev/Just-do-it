@@ -175,6 +175,17 @@
     margin-right: 10px;
 }
 
+.task-manager__button_pagination_prev {
+    background-color: rgb(243, 202, 200);
+}
+.task-manager__button_pagination_next {
+    background-color: rgb(243, 202, 200);
+}
+
+.task-manager__page {
+    background-color: rgb(243, 202, 200);
+}
+
 .body_theme_white {
     background-image: none;
     background-color: white;
@@ -225,6 +236,21 @@
     background: no-repeat center/cover url(images/pic_delete_white.png);
 }
 
+.body_theme_white .task-manager__button_pagination_prev {
+    border: 1px solid black;
+    background-color: white;
+}
+
+.body_theme_white .task-manager__button_pagination_next {
+    border: 1px solid black;
+    background-color: white;
+}
+
+.body_theme_white .task-manager__page {
+    border: 1px solid black;
+    background-color: white;
+}
+
 .body_theme_black {
     background-image: none;
     background-color: black;
@@ -273,6 +299,17 @@
     background: no-repeat center/cover url(images/pic_delete_black.png);
 }
 
+.body_theme_black .task-manager__button_pagination_prev {
+    background-color: rgb(174, 167, 167);;
+}
+
+.body_theme_black .task-manager__button_pagination_next {
+    background-color: rgb(174, 167, 167);;
+}
+
+.body_theme_black .task-manager__page {
+    background-color: rgb(174, 167, 167);;
+}
 
 /* mixins */
 
