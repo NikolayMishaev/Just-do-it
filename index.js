@@ -84,8 +84,8 @@ const updateDate = () => {
     else dateLastTask.textContent = `You don't have a single task.`
 }
 
-const getDate = () => {
-    const date = new Date()
+const getDate = (date) => {
+    if (!date) date = new Date()
     const year = date.getFullYear()
     const month = date.getMonth() + 1
     const day = date.getDate()
@@ -107,6 +107,19 @@ const createTask = (text, dateCreateTask, isComplete) => {
     containerTasks.append(task)
 }
 
+const updateDateTasks = () => {
+    if (arrayTasks.length > countTasksOnPage) {
+        console.log(arrayTasks)
+        arrayTasks = arrayTasks.map(task => {
+            let [day, month, year, hours, minutes, seconds] = task.date.split(' ').map(item => item.replace(/[/,:AMP]/g,' ')).join('').split(' ')
+            day = String(+day + 1)
+            const updateDate = getDate(new Date(`${month} ${day} ${year} ${hours}:${minutes}:${seconds}`))
+            task.date = updateDate
+            return task
+        })
+    }
+}
+
 const setCountPage = () => {
     if (arrayTasks.length < countTasksOnPage) {
         currentPage = 0
@@ -120,6 +133,7 @@ const viewTasks = () => {
     if (arrayTasks.length < countTasksOnPage) {
         hidePaginationPanel()
     } else showPaginationPanel()
+    updateDateTasks()
     setCountPage()
     sliceTasks()
     updateDate()
@@ -167,15 +181,18 @@ buttonTaskAdd.addEventListener('click', (event => {
 buttonPrevPagination.addEventListener('click', ()=> {
     if (currentPage === 0) return
     --currentPage
+    saveToLocalStorage('page', currentPage)
     sliceTasks()
 })
 
 buttonNextPagination.addEventListener('click', ()=> {
     if (currentPage + 1 === getMaxCountPage()) return
     ++currentPage
+    saveToLocalStorage('page', currentPage)
     sliceTasks()
 })
 
 arrayTasks.push(...JSON.parse(localStorage.getItem("arrayTasks")))
 setTheme(JSON.parse(localStorage.getItem('theme')))
+currentPage = +localStorage.getItem('page')
 viewTasks()
