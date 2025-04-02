@@ -57,6 +57,12 @@ const deleteTask = (event) => {
     const dateCurrentTask = currentTask.getAttribute('data-time-create')
     arrayTasks = arrayTasks.filter(task => task.date !== dateCurrentTask)
     currentTask.remove()
+    updateDate()
+}
+
+const updateDate = () => {
+    if (arrayTasks.length > 0) dateLastTask.textContent = arrayTasks.at(-1).date
+    else dateLastTask.textContent = `You don't have a single task.`
 }
 
 const getDate = () => {
@@ -92,5 +98,5 @@ buttonTaskAdd.addEventListener('click', (event => {
     const currentDate = getDate()
     arrayTasks.push({text: taskText, date: currentDate})
     createTask(taskText, currentDate)
-    dateLastTask.textContent = currentDate
+    updateDate()
 }))
