@@ -14,7 +14,7 @@ const page = document.querySelector('.task-manager__page')
 
 let arrayTasks = []
 let currentPage = 0
-let countTasksOnPage = 3
+let countTasksOnPage = 7
 
 const addClasses = (element, ...className) => element.classList.add(...className)
 
@@ -64,6 +64,7 @@ const deleteTask = (event) => {
     const currentTask = event.target.closest('.task-manager__task')
     const dateCurrentTask = currentTask.getAttribute('data-time-create')
     arrayTasks = arrayTasks.filter(task => task.date !== dateCurrentTask)
+    localStorage.setItem("arrayTasks", JSON.stringify(arrayTasks));
     updateDate()
     viewTasks()
 }
@@ -106,14 +107,9 @@ const setCountPage = () => {
 
 const viewTasks = () => {
     if (arrayTasks.length < countTasksOnPage) {
-        setCountPage()
         hidePaginationPanel()
-        sliceTasks()
-        updateDate()
-        return
-    }
+    } else showPaginationPanel()
     setCountPage()
-    showPaginationPanel()
     sliceTasks()
     updateDate()
 }
@@ -152,6 +148,7 @@ buttonTaskAdd.addEventListener('click', (event => {
     // запрет на добавление задачи с одинаковой датой и временем, т.е. добавление новой таски д.б. не чаще раза в секунду
     if (arrayTasks.find(task => task.date === currentDate)) return
     arrayTasks.push({text: taskText, date: currentDate})
+    localStorage.setItem("arrayTasks", JSON.stringify(arrayTasks));
     viewTasks()
 }))
 
@@ -166,3 +163,6 @@ buttonNextPagination.addEventListener('click', ()=> {
     ++currentPage
     sliceTasks()
 })
+
+arrayTasks.push(...JSON.parse(localStorage.getItem("arrayTasks")))
+viewTasks()

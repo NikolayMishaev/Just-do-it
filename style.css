@@ -118,6 +118,7 @@
     width: 327px;
     margin: 0 auto;
     padding-right: 15px;
+    min-height: 420px;
 }
 
 .task-manager__task {
