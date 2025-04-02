@@ -92,6 +92,7 @@
     transform: scale(1.1);
     transition-duration: .5s;
     cursor: pointer;
+    opacity: .7;
 }
 
 .task-manager__button_task_add {

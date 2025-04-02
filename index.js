@@ -8,7 +8,7 @@ const containerTasks = document.querySelector('.task-manager__container-tasks')
 const templateTask = document.querySelector('.template-task')
 const dateLastTask = document.querySelector('.task-manager__date')
 
-const arrayTasks = []
+let arrayTasks = []
 
 const addClasses = (element, ...className) => element.classList.add(...className)
 
@@ -52,6 +52,13 @@ const setEventListener = (element, action) => element.addEventListener('click', 
 
 const checkTaskComplete = (event) => event.target.closest('.task-manager__task').classList.add('task-manager__task_complete')
 
+const deleteTask = (event) => {
+    const currentTask = event.target.closest('.task-manager__task')
+    const dateCurrentTask = currentTask.getAttribute('data-time-create')
+    arrayTasks = arrayTasks.filter(task => task.date !== dateCurrentTask)
+    currentTask.remove()
+}
+
 const getDate = () => {
     const date = new Date()
     const year = date.getFullYear()
@@ -70,6 +77,7 @@ const createTask = (text, dateCreateTask) => {
     const btnTaskComplete = task.querySelector('.task-manager__button_task_complete')
     const btnTaskDelete = task.querySelector('.task-manager__button_task_delete')
     setEventListener(btnTaskComplete, checkTaskComplete)
+    setEventListener(btnTaskDelete, deleteTask)
     containerTasks.prepend(task)
 }
 
