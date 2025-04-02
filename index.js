@@ -50,7 +50,7 @@ const setTheme = (theme) => {
 
 const setEventListener = (element, action) => element.addEventListener('click', action)
 
-const checkTaskComplete = (event) => event.target.closest('.task-manager__task').classList.add('task-manager__task_complete')
+const checkTaskComplete = (event) => event.target.closest('.task-manager__task').classList.toggle('task-manager__task_complete')
 
 const deleteTask = (event) => {
     const currentTask = event.target.closest('.task-manager__task')
@@ -96,6 +96,8 @@ buttonTaskAdd.addEventListener('click', (event => {
     const taskText = inputTask.value
     if (!taskText) return
     const currentDate = getDate()
+    // запрет на добавление задачи с одинаковой датой и временем, т.е. добавление новой таски д.б. не чаще раза в секунду
+    if (arrayTasks.find(task => task.date === currentDate)) return
     arrayTasks.push({text: taskText, date: currentDate})
     createTask(taskText, currentDate)
     updateDate()

@@ -8,6 +8,7 @@
     background-image: linear-gradient(to right, rgb(77, 81, 84), rgb(11, 48, 64));
     font-family: 'Moderustic', 'Arial', sans-serif;
     color: rgb(251, 221, 219);
+    transition-duration: 1s;
 }
 
 .task-manager {
@@ -171,6 +172,10 @@
     color: black
 }
 
+.body_theme_white .task-manager__input:focus-visible {
+    outline: grey solid 2px;
+}
+
 .body_theme_white .task-manager__button_task_add {
     border: 2px solid black;
     border-left: none;
@@ -209,6 +214,10 @@
 
 .body_theme_black .task-manager__title {
     color: lightgray
+}
+
+.body_theme_black .task-manager__line {
+    background-color: lightgrey;
 }
 
 .body_theme_black .task-manager__input {
