@@ -157,6 +157,15 @@
     background: no-repeat center/cover url(images/pic_delete.jpg);
 }
 
+.task-manager__pagination-panel {
+    display: flex;
+    justify-content: center;
+}
+
+.task-manager__button_pagination_prev {
+    margin-right: 10px;
+}
+
 .body_theme_white {
     background-image: none;
     background-color: white;
@@ -253,4 +262,11 @@
 .body_theme_black .task-manager__button_task_delete {
     margin-right: 15px;
     background: no-repeat center/cover url(images/pic_delete_black.png);
+}
+
+
+/* mixins */
+
+.display-none {
+    display: none;
 }

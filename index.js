@@ -7,8 +7,10 @@ const buttonTaskAdd = document.querySelector('.task-manager__button_task_add')
 const containerTasks = document.querySelector('.task-manager__container-tasks')
 const templateTask = document.querySelector('.template-task')
 const dateLastTask = document.querySelector('.task-manager__date')
+const paginationPanel = document.querySelector('.task-manager__pagination-panel')
 
 let arrayTasks = []
+let page = 1
 
 const addClasses = (element, ...className) => element.classList.add(...className)
 
@@ -58,6 +60,7 @@ const deleteTask = (event) => {
     arrayTasks = arrayTasks.filter(task => task.date !== dateCurrentTask)
     currentTask.remove()
     updateDate()
+    checkCountTasks()
 }
 
 const updateDate = () => {
@@ -87,6 +90,14 @@ const createTask = (text, dateCreateTask) => {
     containerTasks.prepend(task)
 }
 
+const checkCountTasks = () => {
+    if (arrayTasks.length < 2) {
+        paginationPanel.classList.add('display-none')
+    } else {
+        paginationPanel.classList.remove('display-none')
+    }
+}
+
 containerBtnsThemes.addEventListener('click', event => {
     const theme = getTheme(event)
     if (theme) setTheme(theme)
@@ -101,4 +112,5 @@ buttonTaskAdd.addEventListener('click', (event => {
     arrayTasks.push({text: taskText, date: currentDate})
     createTask(taskText, currentDate)
     updateDate()
+    checkCountTasks()
 }))
