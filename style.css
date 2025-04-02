@@ -217,6 +217,7 @@
 
 .body_theme_black .task-manager__button_task_add {
     background-color: grey;
+    border-left: solid 2px black;
 }
 
 .body_theme_black .task-manager__date {

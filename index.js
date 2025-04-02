@@ -6,6 +6,7 @@ const inputTask = document.querySelector('.task-manager__input')
 const buttonTaskAdd = document.querySelector('.task-manager__button_task_add')
 const containerTasks = document.querySelector('.task-manager__container-tasks')
 const templateTask = document.querySelector('.template-task')
+const dateLastTask = document.querySelector('.task-manager__date')
 
 const arrayTasks = []
 
@@ -47,6 +48,10 @@ const setTheme = (theme) => {
     }
 }
 
+const setEventListener = (element, action) => element.addEventListener('click', action)
+
+const checkTaskComplete = (event) => event.target.closest('.task-manager__task').classList.add('task-manager__task_complete')
+
 const getDate = () => {
     const date = new Date()
     const year = date.getFullYear()
@@ -58,9 +63,13 @@ const getDate = () => {
     return `${day}/${month}/${year}, ${hours}:${minutes}:${seconds} ${hours > 12 ? 'PM' : 'AM'}`
 }
 
-const createTask = (text) => {
+const createTask = (text, dateCreateTask) => {
     const task = (templateTask.content.cloneNode(true))
     task.querySelector('.task-manager__task-text').textContent = text
+    task.querySelector('.task-manager__task').setAttribute("data-time-create", dateCreateTask)
+    const btnTaskComplete = task.querySelector('.task-manager__button_task_complete')
+    const btnTaskDelete = task.querySelector('.task-manager__button_task_delete')
+    setEventListener(btnTaskComplete, checkTaskComplete)
     containerTasks.prepend(task)
 }
 
@@ -72,6 +81,8 @@ containerBtnsThemes.addEventListener('click', event => {
 buttonTaskAdd.addEventListener('click', (event => {
     const taskText = inputTask.value
     if (!taskText) return
-    arrayTasks.push({text: taskText, time: getDate()})
-    createTask(taskText)
+    const currentDate = getDate()
+    arrayTasks.push({text: taskText, date: currentDate})
+    createTask(taskText, currentDate)
+    dateLastTask.textContent = currentDate
 }))
