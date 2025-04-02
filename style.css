@@ -130,6 +130,15 @@
     font-size: 18px;
 }
 
+.task-manager__task-text{
+    margin: 0;
+    overflow: hidden;
+    max-width: 200px;
+    max-height: 23px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .task-manager__task_complete {
     text-decoration: line-through;
     color: rgb(111, 111, 113)

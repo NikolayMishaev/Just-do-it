@@ -4,6 +4,8 @@ const body = document.querySelector('.body')
 const containerBtnsThemes = document.querySelector('.task-manager__theme')
 const inputTask = document.querySelector('.task-manager__input')
 const buttonTaskAdd = document.querySelector('.task-manager__button_task_add')
+const containerTasks = document.querySelector('.task-manager__container-tasks')
+const templateTask = document.querySelector('.template-task')
 
 const arrayTasks = []
 
@@ -56,6 +58,12 @@ const getDate = () => {
     return `${day}/${month}/${year}, ${hours}:${minutes}:${seconds} ${hours > 12 ? 'PM' : 'AM'}`
 }
 
+const createTask = (text) => {
+    const task = (templateTask.content.cloneNode(true))
+    task.querySelector('.task-manager__task-text').textContent = text
+    containerTasks.prepend(task)
+}
+
 containerBtnsThemes.addEventListener('click', event => {
     const theme = getTheme(event)
     if (theme) setTheme(theme)
@@ -65,5 +73,5 @@ buttonTaskAdd.addEventListener('click', (event => {
     const taskText = inputTask.value
     if (!taskText) return
     arrayTasks.push({text: taskText, time: getDate()})
-    console.log(arrayTasks)
+    createTask(taskText)
 }))
