@@ -14,7 +14,7 @@ const page = document.querySelector('.task-manager__page')
 
 let arrayTasks = []
 let currentPage = 0
-let countTasksOnPage = 7
+let countTasksOnPage = 10
 let currentId = 1
 
 const addClasses = (element, ...className) => element.classList.add(...className)
@@ -87,8 +87,8 @@ const updateDate = () => {
     else dateLastTask.textContent = `You don't have a single task.`
 }
 
-const getDate = () => {
-    const date = new Date()
+const getDate = (date) => {
+    if (!date) date = new Date()
     const year = date.getFullYear()
     const month = date.getMonth() + 1
     const day = date.getDate()
@@ -108,18 +108,21 @@ const createTask = (dataTask) => {
     containerTasks.append(task)
 }
 
-// const updateDateTasks = () => {
-//     if (arrayTasks.length > countTasksOnPage) {
-//         console.log(arrayTasks)
-//         arrayTasks = arrayTasks.map(task => {
-//             let [day, month, year, hours, minutes, seconds] = task.date.split(' ').map(item => item.replace(/[/,:AMP]/g,' ')).join('').split(' ')
-//             day = String(+day + 1)
-//             const updateDate = getDate(new Date(`${month} ${day} ${year} ${hours}:${minutes}:${seconds}`))
-//             task.date = updateDate
-//             return task
-//         })
-//     }
-// }
+const sortByDate = (tasks) => tasks.toSorted((a, b) => b.dateInSeconds - a.dateInSeconds)
+
+const updateDateTasks = () => {
+    if (arrayTasks.length && arrayTasks.length % countTasksOnPage === 0) {
+        let sortedArrTasks = sortByDate(arrayTasks)
+        for (let i = 0; i < countTasksOnPage; i++) {
+            let task = sortedArrTasks[i]
+            let updateDateInSeconds = new Date(task.dateInSeconds)
+            updateDateInSeconds.setDate(updateDateInSeconds.getDate() - 1)
+            const {currentDate, dateInSeconds} = getDate(updateDateInSeconds)
+            task.date = currentDate
+            task.dateInSeconds = dateInSeconds
+        }
+    }
+}
 
 const setCountPage = () => {
     if (arrayTasks.length < countTasksOnPage) {
@@ -134,7 +137,6 @@ const viewTasks = () => {
     if (arrayTasks.length < countTasksOnPage) {
         hidePaginationPanel()
     } else showPaginationPanel()
-    // updateDateTasks()
     setCountPage()
     sliceTasks()
     updateDate()
@@ -150,8 +152,6 @@ const viewPage = () => {
         page.textContent = `${currentPage + 1} / ${maxCountPage}`
     }
 }
-
-const sortByDate = (tasks) => tasks.toSorted((a, b) => b.dateInSeconds - a.dateInSeconds)
 
 const sliceTasks = () => {
     clearContainerTasks()
@@ -185,10 +185,9 @@ buttonTaskAdd.addEventListener('click', (event => {
     const taskText = inputTask.value
     if (!taskText) return
     const {currentDate, dateInSeconds} = getDate()
-    // запрет на добавление задачи с одинаковой датой и временем, т.е. добавление новой таски д.б. не чаще раза в секунду
-    // if (arrayTasks.find(task => task.date === currentDate)) return
     arrayTasks.push({text: taskText, date: currentDate, dateInSeconds: dateInSeconds, isComplete: false, id: currentId})
     ++currentId
+    updateDateTasks()
     saveToLocalStorage('arrayTasks', arrayTasks)
     saveToLocalStorage('id', currentId)
     viewTasks()
