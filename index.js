@@ -62,6 +62,7 @@ const setEventListener = (element, action) => element.addEventListener('click', 
 const saveToLocalStorage = (key, value) => localStorage.setItem(key, JSON.stringify(value));
 
 const checkTaskComplete = (event) => {
+    if (!event.target.className.endsWith('complete')) return
     const idCurrentTask = +event.target.closest('.task-manager__task').getAttribute('id')
     arrayTasks = arrayTasks.map(task => {
         if (task.id === idCurrentTask) task.isComplete = !task.isComplete
@@ -72,6 +73,7 @@ const checkTaskComplete = (event) => {
 }
 
 const deleteTask = (event) => {
+    if (!event.target.className.endsWith('delete')) return
     const currentTask = event.target.closest('.task-manager__task')
     const idCurrentTask = +currentTask.getAttribute('id')
     arrayTasks = arrayTasks.filter(task => task.id !== idCurrentTask)
@@ -102,11 +104,7 @@ const createTask = (dataTask) => {
     const task = (templateTask.content.cloneNode(true))
     task.querySelector('.task-manager__task-text').textContent = text
     task.querySelector('.task-manager__task').setAttribute("id", id)
-    const btnTaskComplete = task.querySelector('.task-manager__button_task_complete')
-    const btnTaskDelete = task.querySelector('.task-manager__button_task_delete')
     if (isComplete) task.querySelector('.task-manager__task').classList.add('task-manager__task_complete')
-    setEventListener(btnTaskComplete, checkTaskComplete)
-    setEventListener(btnTaskDelete, deleteTask)
     containerTasks.append(task)
 }
 
@@ -212,3 +210,5 @@ buttonNextPagination.addEventListener('click', ()=> {
 
 loadDataFromLocalStorage()
 viewTasks()
+setEventListener(containerTasks, checkTaskComplete)
+setEventListener(containerTasks, deleteTask)
