@@ -217,7 +217,7 @@
 
 .body_theme_white .task-manager__task{
     background-color: white;
-    border: 2px solid black;
+    outline: 2px solid black;
     color: black;
 }
 
@@ -280,7 +280,7 @@
 
 .body_theme_black .task-manager__task{
     background-color: rgb(174, 167, 167);
-    border: 2px solid black;
+    outline: 2px solid black;
     color: black;
 }
 

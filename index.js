@@ -153,11 +153,13 @@ const viewPage = () => {
     }
 }
 
+const sortByDate = (tasks) => tasks.toSorted((a, b) => b.dateInSeconds - a.dateInSeconds)
+
 const sliceTasks = () => {
     clearContainerTasks()
     viewPage()
     const currentSlice = currentPage * countTasksOnPage
-    arrayTasks.toReversed().slice(currentSlice, currentSlice + countTasksOnPage).map(task => createTask(task))
+    sortByDate(arrayTasks).slice(currentSlice, currentSlice + countTasksOnPage).map(task => createTask(task))
 }
 
 const showPaginationPanel = () => paginationPanel.classList.remove('display-none')
