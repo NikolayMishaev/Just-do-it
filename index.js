@@ -15,6 +15,7 @@ const page = document.querySelector('.task-manager__page')
 let arrayTasks = []
 let currentPage = 0
 let countTasksOnPage = 7
+let currentId = 1
 
 const addClasses = (element, ...className) => element.classList.add(...className)
 
@@ -61,9 +62,9 @@ const setEventListener = (element, action) => element.addEventListener('click', 
 const saveToLocalStorage = (key, value) => localStorage.setItem(key, JSON.stringify(value));
 
 const checkTaskComplete = (event) => {
-    const currentTaskDate = event.target.closest('.task-manager__task').getAttribute('data-time-create')
+    const idCurrentTask = +event.target.closest('.task-manager__task').getAttribute('id')
     arrayTasks = arrayTasks.map(task => {
-        if (task.date === currentTaskDate) task.isComplete = !task.isComplete
+        if (task.id === idCurrentTask) task.isComplete = !task.isComplete
         return task
     })
     saveToLocalStorage('arrayTasks', arrayTasks)
@@ -72,8 +73,8 @@ const checkTaskComplete = (event) => {
 
 const deleteTask = (event) => {
     const currentTask = event.target.closest('.task-manager__task')
-    const dateCurrentTask = currentTask.getAttribute('data-time-create')
-    arrayTasks = arrayTasks.filter(task => task.date !== dateCurrentTask)
+    const idCurrentTask = +currentTask.getAttribute('id')
+    arrayTasks = arrayTasks.filter(task => task.id !== idCurrentTask)
     saveToLocalStorage('arrayTasks', arrayTasks)
     updateDate()
     viewTasks()
@@ -84,21 +85,23 @@ const updateDate = () => {
     else dateLastTask.textContent = `You don't have a single task.`
 }
 
-const getDate = (date) => {
-    if (!date) date = new Date()
+const getDate = () => {
+    const date = new Date()
     const year = date.getFullYear()
     const month = date.getMonth() + 1
     const day = date.getDate()
     const hours = date.getHours()
     const minutes = date.getMinutes()
     const seconds = date.getSeconds()
-    return `${day}/${month}/${year}, ${hours}:${minutes}:${seconds} ${hours > 12 ? 'PM' : 'AM'}`
+    const formatedDate = `${day}/${month}/${year}, ${hours}:${minutes}:${seconds} ${hours > 12 ? 'PM' : 'AM'}`
+    return {currentDate: formatedDate, dateInSeconds: date }
 }
 
-const createTask = (text, dateCreateTask, isComplete) => {
+const createTask = (dataTask) => {
+    const {text, isComplete, id} = dataTask
     const task = (templateTask.content.cloneNode(true))
     task.querySelector('.task-manager__task-text').textContent = text
-    task.querySelector('.task-manager__task').setAttribute("data-time-create", dateCreateTask)
+    task.querySelector('.task-manager__task').setAttribute("id", id)
     const btnTaskComplete = task.querySelector('.task-manager__button_task_complete')
     const btnTaskDelete = task.querySelector('.task-manager__button_task_delete')
     if (isComplete) task.querySelector('.task-manager__task').classList.add('task-manager__task_complete')
@@ -107,18 +110,18 @@ const createTask = (text, dateCreateTask, isComplete) => {
     containerTasks.append(task)
 }
 
-const updateDateTasks = () => {
-    if (arrayTasks.length > countTasksOnPage) {
-        console.log(arrayTasks)
-        arrayTasks = arrayTasks.map(task => {
-            let [day, month, year, hours, minutes, seconds] = task.date.split(' ').map(item => item.replace(/[/,:AMP]/g,' ')).join('').split(' ')
-            day = String(+day + 1)
-            const updateDate = getDate(new Date(`${month} ${day} ${year} ${hours}:${minutes}:${seconds}`))
-            task.date = updateDate
-            return task
-        })
-    }
-}
+// const updateDateTasks = () => {
+//     if (arrayTasks.length > countTasksOnPage) {
+//         console.log(arrayTasks)
+//         arrayTasks = arrayTasks.map(task => {
+//             let [day, month, year, hours, minutes, seconds] = task.date.split(' ').map(item => item.replace(/[/,:AMP]/g,' ')).join('').split(' ')
+//             day = String(+day + 1)
+//             const updateDate = getDate(new Date(`${month} ${day} ${year} ${hours}:${minutes}:${seconds}`))
+//             task.date = updateDate
+//             return task
+//         })
+//     }
+// }
 
 const setCountPage = () => {
     if (arrayTasks.length < countTasksOnPage) {
@@ -133,7 +136,7 @@ const viewTasks = () => {
     if (arrayTasks.length < countTasksOnPage) {
         hidePaginationPanel()
     } else showPaginationPanel()
-    updateDateTasks()
+    // updateDateTasks()
     setCountPage()
     sliceTasks()
     updateDate()
@@ -154,12 +157,23 @@ const sliceTasks = () => {
     clearContainerTasks()
     viewPage()
     const currentSlice = currentPage * countTasksOnPage
-    arrayTasks.toReversed().slice(currentSlice, currentSlice + countTasksOnPage).map(task => createTask(task.text, task.date, task.isComplete))
+    arrayTasks.toReversed().slice(currentSlice, currentSlice + countTasksOnPage).map(task => createTask(task))
 }
 
 const showPaginationPanel = () => paginationPanel.classList.remove('display-none')
 
 const hidePaginationPanel = () => paginationPanel.classList.add('display-none')
+
+const loadDataFromLocalStorage = () => {
+    const tasks = localStorage.getItem("arrayTasks")
+    if (tasks) arrayTasks.push(...JSON.parse(tasks))
+    const theme = localStorage.getItem('theme')
+    if (theme) setTheme(JSON.parse(theme))
+    const page = +localStorage.getItem('page')
+    if (page) currentPage = page
+    const id = +localStorage.getItem('id')
+    if (id) currentId = id
+}
 
 containerBtnsThemes.addEventListener('click', event => {
     const theme = getTheme(event)
@@ -170,11 +184,13 @@ containerBtnsThemes.addEventListener('click', event => {
 buttonTaskAdd.addEventListener('click', (event => {
     const taskText = inputTask.value
     if (!taskText) return
-    const currentDate = getDate()
+    const {currentDate, dateInSeconds} = getDate()
     // запрет на добавление задачи с одинаковой датой и временем, т.е. добавление новой таски д.б. не чаще раза в секунду
-    if (arrayTasks.find(task => task.date === currentDate)) return
-    arrayTasks.push({text: taskText, date: currentDate, isComplete: false})
+    // if (arrayTasks.find(task => task.date === currentDate)) return
+    arrayTasks.push({text: taskText, date: currentDate, dateInSeconds: dateInSeconds, isComplete: false, id: currentId})
+    ++currentId
     saveToLocalStorage('arrayTasks', arrayTasks)
+    saveToLocalStorage('id', currentId)
     viewTasks()
 }))
 
@@ -192,7 +208,5 @@ buttonNextPagination.addEventListener('click', ()=> {
     sliceTasks()
 })
 
-arrayTasks.push(...JSON.parse(localStorage.getItem("arrayTasks")))
-setTheme(JSON.parse(localStorage.getItem('theme')))
-currentPage = +localStorage.getItem('page')
+loadDataFromLocalStorage()
 viewTasks()
