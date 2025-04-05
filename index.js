@@ -108,11 +108,11 @@ const createTask = (dataTask) => {
     containerTasks.append(task)
 }
 
-const sortByDate = (tasks) => tasks.toSorted((a, b) => b.dateInSeconds - a.dateInSeconds)
+const sortByID = (tasks) => tasks.toSorted((a, b) => b.id - a.id)
 
 const updateDateTasks = () => {
     if (arrayTasks.length && arrayTasks.length % countTasksOnPage === 0) {
-        let sortedArrTasks = sortByDate(arrayTasks)
+        let sortedArrTasks = sortByID(arrayTasks)
         for (let i = 0; i < countTasksOnPage; i++) {
             let task = sortedArrTasks[i]
             let updateDateInSeconds = new Date(task.dateInSeconds)
@@ -157,7 +157,7 @@ const sliceTasks = () => {
     clearContainerTasks()
     viewPage()
     const currentSlice = currentPage * countTasksOnPage
-    sortByDate(arrayTasks).slice(currentSlice, currentSlice + countTasksOnPage).map(task => createTask(task))
+    sortByID(arrayTasks).slice(currentSlice, currentSlice + countTasksOnPage).map(task => createTask(task))
 }
 
 const showPaginationPanel = () => paginationPanel.classList.remove('display-none')
