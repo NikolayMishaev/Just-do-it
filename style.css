@@ -14,6 +14,7 @@
 .task-manager {
     padding-top: 12vh;
     padding-right: 100px;
+    min-width: 430px;
 }
 
 .task-manager__theme {
@@ -315,4 +316,38 @@
 
 .display-none {
     display: none;
+}
+
+@media (max-width: 900px) {
+    .task-manager {
+        padding-right: 0;
+    }
+
+}
+
+@media (max-width: 700px) {
+    .task-manager__title {
+        font-size: 14vw;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+    }
+    .task-manager__line {
+        height: 17vw;
+        position: relative;
+        right: 7px;
+    }
+}
+
+@media (max-width: 500px) {
+    .task-manager {
+        width: 100%;
+        padding: 12vh 15px;
+    }
+    .task-manager__title {
+        font-size: 70px;
+    }
+    .task-manager__line {
+        height: 85px;
+    }
 }
